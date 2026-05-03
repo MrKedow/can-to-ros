@@ -1,18 +1,18 @@
 # CAN-to-ROS 2 总线数据转发节点
 
-将 CAN 总线原始报文实时转换为 ROS 2 标准话题的 Python 节点。基于 SocketCAN 和 cantools，适用于将底层车载总线数据接入自动驾驶中间件的开发与测试场景。
-
+将 `CAN` 总线原始报文实时转换为 `ROS 2` 标准话题的 `Python` 节点。基于 `SocketCAN` 和 `cantools`，适用于将底层车载总线数据接入自动驾驶中间件的开发与测试场景。
+本工具以`车速`和`引擎转速`的传递为例。
 ## 功能
 
-- 通过 SocketCAN 监听虚拟 CAN 总线（vcan0）上的原始报文
-- 使用 DBC 文件解码报文中的物理信号（如发动机转速、车速）
-- 将解码后的信号自动发布为 ROS 2 话题（`std_msgs/Float32`）
-- 可以通过 ROS 2 参数配置 DBC 文件路径和 CAN 接口名称
+- 通过 `SocketCAN` 监听虚拟 `CAN` 总线（`vcan0`）上的原始报文
+- 使用 `DBC` 文件解码报文中的物理信号（如发动机转速、车速）
+- 将解码后的信号自动发布为 `ROS 2` 话题（`std_msgs/Float32`）
+- 可以通过 `ROS 2` 参数配置 `DBC` 文件路径和 `CAN` 接口名称
 
 ## 依赖
 
-- 操作系统：Ubuntu 24.04（或已启用 vcan 内核模块的 WSL2）
-- ROS 2 发行版：Jazzy Jalisco
+- 操作系统：`Ubuntu 24.04`（因为`Ubuntu 24.04`可能不支持`vcan0`,也可以从[https://github.com/MrKedow/WSL2-Linux-Kernel](https://github.com/MrKedow/WSL2-Linux-Kernel)下载带`vcan0`的内核，自己动手编译，下载慢可以轮番使用这两个加速站：[https://tool.mintimate.cn/gh/](https://tool.mintimate.cn/gh/)、[https://github.akams.cn/](https://github.akams.cn/)）
+- ROS 2 发行版：`Jazzy Jalisco`
 - Python 库：`cantools`、`python-can`
 - 系统工具：`can-utils`
 
@@ -36,15 +36,15 @@ can_to_ros/
 
 ### 1. 克隆仓库（或直接放入工作空间）
 
-将 `can_to_ros` 文件夹放入你的 ROS 2 工作空间的 `src` 目录下：
+将 `can_to_ros` 文件夹放入 `ROS 2` 工作空间的 `src` 目录下：
 
 ```bash
 cd ~/can_ros_ws/src
 # 假设已将 can_to_ros 文件夹复制到此处
 ```
 
-### 2. 安装 Python 依赖（venv）
-
+### 2. 安装 `Python` 依赖（`venv`）
+Ubuntu 24.04不允许直接在工作空间安装依赖，所以这里要先启用虚拟环境。
 ```bash
 python3 -m venv ~/can_ros_env
 source ~/can_ros_env/bin/activate
@@ -52,7 +52,7 @@ pip install cantools python-can pyyaml setuptools
 ```
 
 ### 3. 编译工作空间
-
+保持虚拟环境打开，命令行前面应该带有`(can_ros_env)`前缀。
 ```bash
 source /opt/ros/jazzy/setup.bash
 cd ~/can_ros_ws
@@ -144,7 +144,7 @@ ROS 2 节点 (发布 Float32 话题)
 ros2 topic echo (验证输出)
 ```
 
-## 在实体 CAN 硬件上应用
+## 在实体 CAN 硬件上测试
 
 将节点的 `can_interface` 参数从 `vcan0` 改为实际的 CAN 接口名（如 `can0`），并替换 `bustype` 为对应驱动（如 `socketcan`、`kvaser`、`vector` 等），代码无需其他修改。
 
